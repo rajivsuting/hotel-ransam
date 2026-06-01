@@ -1,0 +1,300 @@
+@import "tailwindcss";
+
+/* ----------------------------------------------------------------------------
+   THEME TOKENS  (Tailwind v4 — exposed as utilities, e.g. bg-ivory, text-gold)
+---------------------------------------------------------------------------- */
+@theme {
+  --color-ivory: #f5f0e8;
+  --color-sand: #d9cdbf;
+  --color-charcoal: #1c1c1a;
+  --color-gold: #b89a6a;
+  --color-gold-soft: #c9b48d;
+  --color-muted: #7a7268;
+  --color-cream: #fdfcfa;
+
+  /* Refined "ransam" tokens used by the rebuilt sections */
+  --color-ransam-ink: #18181a;
+  --color-ransam-stone: #ece5d8;
+  --color-ransam-dusk: #2c2924;
+  --color-ransam-gold: #c4a882;
+  --color-ransam-clay: #a2876e;
+  --color-ransam-mist: #d7cfc2;
+  --color-ransam-white: #fdfcfa;
+
+  --font-display: var(--font-cormorant);
+  --font-body: var(--font-jost);
+  --font-accent: var(--font-cinzel);
+
+  --font-playfair: var(--font-playfair-display);
+  --font-outfit: var(--font-outfit);
+  --font-dmserif: var(--font-dm-serif);
+  --font-cormorant-sc: var(--font-cormorant-sc);
+
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ----------------------------------------------------------------------------
+   BASE
+---------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-charcoal);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--color-gold);
+  color: var(--color-cream);
+}
+
+/* Reduced motion: collapse all transitions/animations to near-instant */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   TYPOGRAPHY UTILITIES
+---------------------------------------------------------------------------- */
+.font-display {
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+}
+.font-body {
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+.font-accent {
+  font-family: var(--font-accent), Georgia, serif;
+}
+.font-playfair {
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
+}
+.font-outfit {
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+.font-dmserif {
+  font-family: var(--font-dmserif), Georgia, serif;
+}
+.font-cormorant-sc {
+  font-family: var(--font-cormorant-sc), Georgia, serif;
+}
+
+/* Outline (stroked) display text */
+.text-outline-ink {
+  -webkit-text-stroke: 1px var(--color-ransam-ink);
+  color: transparent;
+}
+
+/* Subtle film grain overlay (Dining) */
+.grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Repeating dot texture (Gallery) */
+.dots-overlay {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.045) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+/* Dotted leader line for spa treatment rows */
+.leader-dashed {
+  border-bottom: 1px dashed rgba(196, 168, 130, 0.22);
+}
+
+.overline {
+  font-family: var(--font-accent), Georgia, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+@media (min-width: 1024px) {
+  .overline {
+    font-size: 0.75rem;
+  }
+}
+
+/* Fluid display sizing */
+.display-hero {
+  font-size: clamp(2.8rem, 8vw, 7.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+}
+.display-xl {
+  font-size: clamp(2rem, 6vw, 5rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+.display-lg {
+  font-size: clamp(1.9rem, 4.5vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+.display-banner {
+  font-size: clamp(1.4rem, 4vw, 2.8rem);
+  line-height: 1.25;
+}
+
+/* ----------------------------------------------------------------------------
+   COMPONENT-LEVEL UTILITIES
+---------------------------------------------------------------------------- */
+
+/* gold underline that wipes in from the left (nav links + card CTAs) */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
+  width: 100%;
+  background-color: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-luxe);
+}
+.link-underline:hover::after,
+.link-underline:focus-visible::after,
+.group:hover .link-underline::after {
+  transform: scaleX(1);
+}
+
+/* CTA button — background fills left→right on hover */
+.btn-fill {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.45s var(--ease-luxe);
+}
+.btn-fill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-luxe);
+  z-index: -1;
+}
+.btn-fill:hover::before,
+.btn-fill:focus-visible::before {
+  transform: scaleX(1);
+}
+
+/* Accessible focus ring */
+:where(a, button, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100%;
+  z-index: 200;
+  background: var(--color-charcoal);
+  color: var(--color-cream);
+  padding: 0.75rem 1.25rem;
+  border-radius: 2px;
+  transition: top 0.3s var(--ease-luxe);
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Hide scrollbars on horizontal scroll strips while keeping function */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Diagonal clip for section separators */
+.clip-diagonal-t {
+  clip-path: polygon(0 4vw, 100% 0, 100% 100%, 0 100%);
+}
+
+/* image zoom wrapper */
+.img-zoom {
+  transition: transform 0.9s var(--ease-luxe);
+}
+.group:hover .img-zoom {
+  transform: scale(1.06);
+}
+
+/* Full-bleed cover for a 16:9 background video iframe (oversized so a small
+   parallax translate never reveals the edges). */
+.video-cover {
+  pointer-events: none;
+}
+.video-cover iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120vw;
+  height: 67.5vw; /* 120 * 9/16 */
+  min-height: 122vh;
+  min-width: 216.9vh; /* 122 * 16/9 */
+  border: 0;
+}
+
+@keyframes chevron-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+}
+.animate-chevron {
+  animation: chevron-bounce 2s var(--ease-luxe) infinite;
+}
+
+@keyframes grain-noise {
+  0%,
+  100% {
+    opacity: 0.04;
+  }
+  50% {
+    opacity: 0.06;
+  }
+}
