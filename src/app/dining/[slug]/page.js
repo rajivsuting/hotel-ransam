@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import DetailPage from "@/components/DetailPage";
 import { DINING_VENUES, getDiningVenue } from "@/lib/content";
+import { toAbsoluteUrl } from "@/lib/seo";
 
 export function generateStaticParams() {
   return DINING_VENUES.map((venue) => ({ slug: venue.slug }));
@@ -10,9 +11,25 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const venue = getDiningVenue(slug);
   if (!venue) return { title: "Venue not found" };
+  const path = `/dining/${slug}`;
   return {
-    title: `${venue.name} — Hotel Ransam Dining`,
+    title: `${venue.name} Dining`,
     description: venue.description,
+    alternates: {
+      canonical: path,
+    },
+    openGraph: {
+      title: `${venue.name} | Hotel Ransam Dining`,
+      description: venue.description,
+      url: path,
+      images: [
+        {
+          url: toAbsoluteUrl(venue.img),
+          alt: venue.alt,
+        },
+      ],
+      type: "article",
+    },
   };
 }
 

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import DetailPage from "@/components/DetailPage";
 import { FACILITIES, getFacility } from "@/lib/content";
+import { toAbsoluteUrl } from "@/lib/seo";
 
 export function generateStaticParams() {
   return FACILITIES.map((f) => ({ slug: f.slug }));
@@ -10,9 +11,25 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const facility = getFacility(slug);
   if (!facility) return { title: "Facility not found" };
+  const path = `/facilities/${slug}`;
   return {
-    title: `${facility.name} — Hotel Ransam`,
+    title: `${facility.name} Facility`,
     description: facility.description,
+    alternates: {
+      canonical: path,
+    },
+    openGraph: {
+      title: `${facility.name} | Hotel Ransam`,
+      description: facility.description,
+      url: path,
+      images: [
+        {
+          url: toAbsoluteUrl("/roof.jpg"),
+          alt: `${facility.name} at Hotel Ransam`,
+        },
+      ],
+      type: "article",
+    },
   };
 }
 

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import DetailPage from "@/components/DetailPage";
 import { SPA_TREATMENTS, getSpaTreatment } from "@/lib/content";
+import { toAbsoluteUrl } from "@/lib/seo";
 
 export function generateStaticParams() {
   return SPA_TREATMENTS.map((t) => ({ slug: t.slug }));
@@ -10,9 +11,25 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const treatment = getSpaTreatment(slug);
   if (!treatment) return { title: "Treatment not found" };
+  const path = `/spa/${slug}`;
   return {
-    title: `${treatment.name} — Hotel Ransam Spa`,
+    title: `${treatment.name} Spa`,
     description: treatment.description,
+    alternates: {
+      canonical: path,
+    },
+    openGraph: {
+      title: `${treatment.name} | Hotel Ransam Spa`,
+      description: treatment.description,
+      url: path,
+      images: [
+        {
+          url: toAbsoluteUrl(treatment.img),
+          alt: treatment.alt,
+        },
+      ],
+      type: "article",
+    },
   };
 }
 

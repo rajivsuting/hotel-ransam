@@ -121,6 +121,15 @@ export default function Navigation() {
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-40 flex flex-col bg-charcoal px-8 pb-12 pt-28 text-cream lg:hidden"
           >
+            <button
+              type="button"
+              onClick={closeAnd}
+              aria-label="Close menu"
+              className="absolute right-6 top-6 flex h-11 w-11 items-center justify-center text-cream"
+            >
+              <Close className="h-6 w-6" />
+            </button>
+
             <m.ul
               initial="hidden"
               animate="show"
