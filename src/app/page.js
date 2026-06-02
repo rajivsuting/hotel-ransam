@@ -5,6 +5,7 @@ import Philosophy from "@/components/Philosophy";
 import Rooms from "@/components/Rooms";
 import ParallaxBanner from "@/components/ParallaxBanner";
 import Dining from "@/components/Dining";
+import RooftopRestaurant from "@/components/RooftopRestaurant";
 import Spa from "@/components/Spa";
 import Experiences from "@/components/Experiences";
 import Testimonials from "@/components/Testimonials";
@@ -22,6 +23,7 @@ export default function Home() {
         <Rooms />
         <ParallaxBanner />
         <Dining />
+        <RooftopRestaurant />
         <Spa />
         <Experiences />
         <Testimonials />

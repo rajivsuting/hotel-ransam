@@ -11,7 +11,7 @@ export const ROOMS = [
     slug: "single-room",
     name: "Single Room",
     tagline: "A serene retreat composed for the solo traveller.",
-    price: "1,300",
+    price: "1,456",
     img: "/Double-room.jpeg",
     alt: "Single room with a neatly dressed bed and warm light",
     description:
@@ -25,10 +25,10 @@ export const ROOMS = [
     ],
   },
   {
-    slug: "double-room",
-    name: "Double Room",
+    slug: "double-deluxe",
+    name: "Double Deluxe",
     tagline: "Comfort for two, framed by soft natural light.",
-    price: "2,300",
+    price: "3,024",
     img: "/Double-room.jpeg",
     alt: "Double room with a plush king bed and timber accents",
     description:
@@ -45,7 +45,7 @@ export const ROOMS = [
     slug: "triple-room",
     name: "Triple Room",
     tagline: "Generous space for friends or a small family.",
-    price: "2,600",
+    price: "3,584",
     img: "/Triple-room.jpeg",
     alt: "Triple room with layered bedding and a calm palette",
     description:
@@ -62,7 +62,7 @@ export const ROOMS = [
     slug: "quadruple-room",
     name: "Quadruple Room",
     tagline: "Room to gather, rest, and unwind together.",
-    price: "3,200",
+    price: "4,256",
     img: "/Quadruple-room.jpeg",
     alt: "Spacious quadruple room arranged for four guests",
     description:
@@ -76,10 +76,10 @@ export const ROOMS = [
     ],
   },
   {
-    slug: "delux-double",
-    name: "Delux Double",
+    slug: "executive-double-deluxe",
+    name: "Executive Double Deluxe",
     tagline: "Elevated comfort with refined finishes throughout.",
-    price: "4,000",
+    price: "4,480",
     img: "/executive-double-deluxe-room.jpeg",
     alt: "Executive delux double room with refined finishes",
     description:
@@ -96,7 +96,7 @@ export const ROOMS = [
     slug: "presidential-suite",
     name: "Presidential Suite",
     tagline: "Our finest address — the pinnacle of Hotel Ransam.",
-    price: "7,000",
+    price: "7,840",
     img: "/presidential-suite-room.jpeg",
     alt: "Presidential suite with lounge seating and premium amenities",
     description:

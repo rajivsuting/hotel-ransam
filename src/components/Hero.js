@@ -184,7 +184,8 @@ export default function Hero() {
           transition={{ duration: 0.8, ease: EASE, delay: 0.95 }}
           className="mt-7 max-w-md font-body text-[0.95rem] font-light leading-relaxed text-cream/85 lg:text-[1.1rem]"
         >
-          A sanctuary carved from nature. Rediscover yourself at Hotel Ransam.
+          A sanctuary carved from nature. Rediscover yourself at Hotel Ransam, the only
+          3-star hotel in Mizoram.
         </m.p>
 
         <m.div

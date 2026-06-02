@@ -1,14 +1,35 @@
 "use client";
 
+import { useState } from "react";
 import { m } from "framer-motion";
 import { fadeUp, staggerParent, viewportOnce } from "@/lib/motion";
 import { ArrowRight } from "@/lib/icons";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 const fieldClass =
   "h-12 w-full bg-transparent font-body text-sm text-charcoal outline-none placeholder:text-muted/70";
 const labelClass = "overline mb-1 block text-muted";
 
 export default function Booking() {
+  const [checkin, setCheckin] = useState("");
+  const [checkout, setCheckout] = useState("");
+  const [guests, setGuests] = useState("1 Guest");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const message = [
+      "Hello Hotel Ransam, I want to check room availability.",
+      checkin ? `Check-in: ${checkin}` : null,
+      checkout ? `Check-out: ${checkout}` : null,
+      `Guests: ${guests}`,
+      "Please share available room options and rates.",
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    window.open(buildWhatsAppUrl(message), "_blank", "noopener,noreferrer");
+  };
+
   return (
     <section
       id="booking"
@@ -38,26 +59,43 @@ export default function Booking() {
           whileInView="show"
           viewport={viewportOnce}
           variants={fadeUp}
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSubmit}
           className="mt-12 grid grid-cols-1 gap-4 rounded-md bg-cream p-5 text-left shadow-[0_30px_60px_-30px_rgba(28,28,26,0.35)] md:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end lg:gap-6 lg:p-6"
         >
           <div className="border-b border-sand pb-1 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-6">
             <label htmlFor="checkin" className={labelClass}>
               Check-in
             </label>
-            <input id="checkin" type="date" className={fieldClass} />
+            <input
+              id="checkin"
+              type="date"
+              value={checkin}
+              onChange={(e) => setCheckin(e.target.value)}
+              className={fieldClass}
+            />
           </div>
           <div className="border-b border-sand pb-1 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-6">
             <label htmlFor="checkout" className={labelClass}>
               Check-out
             </label>
-            <input id="checkout" type="date" className={fieldClass} />
+            <input
+              id="checkout"
+              type="date"
+              value={checkout}
+              onChange={(e) => setCheckout(e.target.value)}
+              className={fieldClass}
+            />
           </div>
           <div className="border-b border-sand pb-1 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-6">
             <label htmlFor="guests" className={labelClass}>
               Guests
             </label>
-            <select id="guests" className={`${fieldClass} cursor-pointer`}>
+            <select
+              id="guests"
+              value={guests}
+              onChange={(e) => setGuests(e.target.value)}
+              className={`${fieldClass} cursor-pointer`}
+            >
               <option>1 Guest</option>
               <option>2 Guests</option>
               <option>3 Guests</option>

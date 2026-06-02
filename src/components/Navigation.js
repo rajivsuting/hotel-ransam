@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { m, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, Close } from "@/lib/icons";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 const LINKS = [
   { label: "Rooms", href: "/#rooms" },
@@ -27,6 +28,9 @@ export default function Navigation() {
   });
 
   const closeAnd = () => setOpen(false);
+  const reserveNowUrl = buildWhatsAppUrl(
+    "Hello Hotel Ransam, I want to reserve a room. Please share availability and best rates."
+  );
 
   return (
     <m.header
@@ -80,7 +84,9 @@ export default function Navigation() {
 
         {/* Desktop CTA */}
         <a
-          href="/#booking"
+          href={reserveNowUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           className={`btn-fill hidden border px-7 py-3 font-body text-[0.72rem] uppercase tracking-[0.22em] lg:inline-block ${
             scrolled
               ? "border-gold text-charcoal hover:text-cream"
@@ -135,8 +141,10 @@ export default function Navigation() {
             </m.ul>
 
             <m.a
-              href="/#booking"
+              href={reserveNowUrl}
               onClick={closeAnd}
+              target="_blank"
+              rel="noopener noreferrer"
               variants={drawerLink}
               initial="hidden"
               animate="show"

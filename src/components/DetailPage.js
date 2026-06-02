@@ -4,6 +4,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import MobileTabBar from "@/components/MobileTabBar";
 import { ArrowRight } from "@/lib/icons";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 export default function DetailPage({
   category,
@@ -21,6 +22,9 @@ export default function DetailPage({
   theme = "light",
 }) {
   const isDark = theme === "dark";
+  const reserveNowUrl = buildWhatsAppUrl(
+    `Hello Hotel Ransam, I want to reserve the ${title}. Please share availability and booking details.`
+  );
 
   return (
     <>
@@ -164,8 +168,10 @@ export default function DetailPage({
                 isDark ? "border-ransam-gold/20" : "border-sand"
               }`}
             >
-              <Link
-                href="/#booking"
+              <a
+                href={reserveNowUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`btn-fill inline-flex items-center justify-center gap-2 border px-8 py-4 font-body text-[0.72rem] uppercase tracking-[0.22em] ${
                   isDark
                     ? "border-ransam-gold text-ransam-stone hover:text-ransam-dusk"
@@ -174,7 +180,7 @@ export default function DetailPage({
               >
                 Reserve Now
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </a>
               <Link
                 href={categoryHref}
                 className={`font-body text-sm font-light ${
