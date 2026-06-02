@@ -182,10 +182,12 @@ export default function Hero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: EASE, delay: 0.95 }}
-          className="mt-7 max-w-md font-body text-[0.95rem] font-light leading-relaxed text-cream/85 lg:text-[1.1rem]"
+          className="mt-7 max-w-xl font-body text-[0.95rem] font-light leading-relaxed text-cream/85 lg:text-[1.1rem]"
         >
-          A sanctuary carved from nature. Rediscover yourself at Hotel Ransam, the only
-          3-star hotel in Mizoram.
+          A sanctuary carved from nature. Rediscover yourself at Hotel Ransam.
+          <span className="mt-3 block text-[1.05rem] font-medium text-gold-soft lg:text-[1.4rem]">
+            The only 3-star hotel in Mizoram.
+          </span>
         </m.p>
 
         <m.div
