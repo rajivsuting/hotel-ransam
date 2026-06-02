@@ -7,50 +7,30 @@ import { viewportOnce } from "@/lib/motion";
 
 const EASE = [0.22, 1, 0.36, 1];
 
-const IMAGES = [
-  {
-    src: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80",
-    caption: "The Arrival, Dawn",
-    grid: "lg:col-start-1 lg:col-span-4 lg:row-start-1",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80",
-    caption: "A Room with a View",
-    grid: "lg:col-start-5 lg:col-span-3 lg:row-start-1",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&q=80",
-    caption: "The Suite, Morning",
-    grid: "lg:col-start-8 lg:col-span-5 lg:row-start-1",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&q=80",
-    caption: "The Pool, Dusk",
-    grid: "lg:col-start-1 lg:col-span-3 lg:row-start-2",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80",
-    caption: "The Rooftop Table",
-    grid: "lg:col-start-4 lg:col-span-5 lg:row-start-2 lg:row-span-2",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80",
-    caption: "Aizawl, Below",
-    grid: "lg:col-start-9 lg:col-span-4 lg:row-start-2",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80",
-    caption: "The Spa, Candlelit",
-    grid: "lg:col-start-1 lg:col-span-3 lg:row-start-3",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&q=80",
-    caption: "A Quiet Corner",
-    grid: "lg:col-start-9 lg:col-span-4 lg:row-start-3",
-  },
+const GRIDS = [
+  "lg:col-start-1 lg:col-span-4 lg:row-start-1",
+  "lg:col-start-5 lg:col-span-3 lg:row-start-1",
+  "lg:col-start-8 lg:col-span-5 lg:row-start-1",
+  "lg:col-start-1 lg:col-span-3 lg:row-start-2",
+  "lg:col-start-4 lg:col-span-5 lg:row-start-2",
+  "lg:col-start-9 lg:col-span-4 lg:row-start-2",
+  "lg:col-start-1 lg:col-span-3 lg:row-start-3",
+  "lg:col-start-4 lg:col-span-4 lg:row-start-3",
+  "lg:col-start-8 lg:col-span-5 lg:row-start-3",
 ];
 
-const hi = (src) => src.replace(/w=\d+/, "w=1600");
+function gallerySrc(n) {
+  return n === 3 ? "/gallery3.jpg" : `/gallery${n}.jpeg`;
+}
+
+const IMAGES = GRIDS.map((grid, i) => {
+  const n = i + 1;
+  return {
+    src: gallerySrc(n),
+    caption: `Hotel Ransam · ${String(n).padStart(2, "0")}`,
+    grid,
+  };
+});
 
 export default function Gallery() {
   const [active, setActive] = useState(null);
@@ -104,7 +84,7 @@ export default function Gallery() {
             07 · Gallery
           </p>
           <h2 className="font-playfair mt-3 text-[clamp(2.2rem,5vw,3.5rem)] text-ransam-stone">
-            Frames of Ransam
+            Frames of Hotel Ransam
           </h2>
           <p className="mt-3 font-outfit text-[0.95rem] font-light italic text-ransam-clay">
             A property best experienced in person. Until then, these.
@@ -163,12 +143,12 @@ export default function Gallery() {
           className="mt-12 text-center"
         >
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/hotel_ransam?igsh=ZGdrNW92ZTE3b3M3&utm_source=qr"
             target="_blank"
             rel="noopener noreferrer"
             className="link-underline font-outfit text-[0.9rem] text-ransam-stone transition-transform hover:-translate-y-0.5 hover:text-ransam-gold"
           >
-            Explore more on Instagram &nbsp;·&nbsp; @hotelransam
+            Explore more on Instagram &nbsp;·&nbsp; @hotel_ransam
           </a>
         </m.div>
       </div>
@@ -233,7 +213,7 @@ export default function Gallery() {
               className="relative h-[78vh] w-full max-w-[85vw] touch-pan-y select-none"
             >
               <Image
-                src={hi(IMAGES[active].src)}
+                src={IMAGES[active].src}
                 alt={IMAGES[active].caption}
                 fill
                 sizes="85vw"

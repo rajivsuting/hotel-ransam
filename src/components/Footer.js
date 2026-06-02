@@ -8,35 +8,34 @@ const COLUMNS = [
   {
     title: "Rooms",
     links: [
-      { label: "Single & Double", href: "#rooms" },
-      { label: "Delux Double", href: "#rooms" },
-      { label: "Suite", href: "#rooms" },
-      { label: "Presidential Suite", href: "#rooms" },
+      { label: "Single Room", href: "/rooms/single-room" },
+      { label: "Double Room", href: "/rooms/double-room" },
+      { label: "Presidential Suite", href: "/rooms/presidential-suite" },
     ],
   },
   {
     title: "Dine & Celebrate",
     links: [
-      { label: "Rooftop Restaurant", href: "#dining" },
-      { label: "Starlight Karaoke", href: "#facilities" },
-      { label: "Banquet Hall", href: "#facilities" },
-      { label: "Conference Room", href: "#facilities" },
+      { label: "The Rooftop", href: "/dining/the-rooftop" },
+      { label: "Starlight Karaoke", href: "/facilities/starlight-karaoke" },
+      { label: "Banquet Hall", href: "/facilities/banquet-hall" },
+      { label: "Conference Room", href: "/facilities/conference-room" },
     ],
   },
   {
     title: "Facilities",
     links: [
-      { label: "Spa & Wellness", href: "#spa" },
-      { label: "Gym", href: "#facilities" },
-      { label: "Mini Theater", href: "#facilities" },
-      { label: "Pool Table & Mini Pool", href: "#facilities" },
+      { label: "Spa & Wellness", href: "/facilities/spa-wellness" },
+      { label: "Gym", href: "/facilities/gym" },
+      { label: "Mini Theater", href: "/facilities/mini-theater" },
+      { label: "Sweet Escape", href: "/facilities/sweet-escape" },
     ],
   },
   {
     title: "Contact",
     links: [
-      { label: "90895 25221", href: "tel:+919089525221" },
-      { label: "81328 11845", href: "tel:+918132811845" },
+      { label: "89747 65737", href: "tel:+918974765737" },
+      { label: "81199 14534", href: "tel:+918119914534" },
       { label: "hotelransam@gmail.com", href: "mailto:hotelransam@gmail.com" },
       { label: "ransam.business.site", href: "https://ransam.business.site" },
     ],
@@ -44,8 +43,16 @@ const COLUMNS = [
 ];
 
 const SOCIALS = [
-  { Icon: Instagram, label: "Instagram", href: "https://instagram.com" },
-  { Icon: Facebook, label: "Facebook", href: "https://facebook.com" },
+  {
+    Icon: Instagram,
+    label: "Instagram",
+    href: "https://www.instagram.com/hotel_ransam?igsh=ZGdrNW92ZTE3b3M3&utm_source=qr",
+  },
+  {
+    Icon: Facebook,
+    label: "Facebook",
+    href: "https://www.facebook.com/share/18Y5C2XZMW/?mibextid=wwXIfr",
+  },
   { Icon: Pinterest, label: "Pinterest", href: "https://pinterest.com" },
 ];
 
@@ -113,15 +120,15 @@ export default function Footer() {
   return (
     <footer
       id="contact"
-      className="border-t border-gold/40 bg-charcoal px-5 pb-10 pt-16 text-cream sm:px-8 lg:px-12 lg:pt-20"
+      className="border-t border-gold/40 bg-charcoal px-5 pb-[5.75rem] pt-16 text-cream sm:px-8 sm:pb-10 lg:px-12 lg:pt-20"
     >
       <div className="mx-auto max-w-[1500px]">
         <div className="text-center">
           <a
-            href="#home"
+            href="/"
             className="font-accent text-3xl tracking-[0.32em] text-gold"
           >
-            RANSAM
+            Hotel Ransam
           </a>
           <p className="mx-auto mt-5 max-w-md font-body text-sm font-light leading-relaxed text-cream/60">
             Aizawl&apos;s first luxury resort, where stillness meets splendour.

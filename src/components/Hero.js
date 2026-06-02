@@ -2,53 +2,33 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { m, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import { IMAGES } from "@/lib/images";
 import { useParallaxEnabled } from "@/lib/motion";
-import { Play, ArrowRight, Close, VolumeOn, VolumeOff } from "@/lib/icons";
+import { Play, ArrowRight, VolumeOn, VolumeOff } from "@/lib/icons";
+import { useReels } from "@/components/ReelsProvider";
 
 const EASE = [0.22, 1, 0.36, 1];
-const VIDEO_ID = "62ey4xYMjew";
-const FILM_SRC = `https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
-
-// Load the YouTube IFrame Player API exactly once and resolve when ready.
-let ytApiPromise = null;
-function loadYouTubeApi() {
-  if (typeof window === "undefined") return Promise.resolve(null);
-  if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
-  if (ytApiPromise) return ytApiPromise;
-  ytApiPromise = new Promise((resolve) => {
-    const prev = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = () => {
-      if (typeof prev === "function") prev();
-      resolve(window.YT);
-    };
-    const tag = document.createElement("script");
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
-  });
-  return ytApiPromise;
-}
+const FILM_SRC = "/hero.mp4";
 
 export default function Hero() {
   const ref = useRef(null);
-  const playerRef = useRef(null);
+  const videoRef = useRef(null);
   const parallax = useParallaxEnabled();
-  const [film, setFilm] = useState(false);
+  const { openReels, isOpen: reelsOpen } = useReels();
   const [muted, setMuted] = useState(true);
-  const [playerReady, setPlayerReady] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
 
   const toggleMute = () => {
-    const player = playerRef.current;
-    if (!player) return;
-    if (muted) {
-      player.unMute();
-      player.setVolume(100);
-      setMuted(false);
-    } else {
-      player.mute();
-      setMuted(true);
+    const v = videoRef.current;
+    if (!v) return;
+    const next = !v.muted;
+    v.muted = next;
+    if (!next) {
+      v.volume = 1;
+      v.play().catch(() => {});
     }
+    setMuted(next);
   };
 
   const { scrollYProgress } = useScroll({
@@ -60,55 +40,51 @@ export default function Hero() {
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -90]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
 
-  // Initialise the background player through the official API for reliable
-  // mute/unmute control.
+  // Ensure the background video is muted + autoplaying (browsers require the
+  // muted property to be set for reliable autoplay).
   useEffect(() => {
-    let cancelled = false;
-    loadYouTubeApi().then((YT) => {
-      if (cancelled || !YT || playerRef.current) return;
-      playerRef.current = new YT.Player("ransam-bg-video", {
-        videoId: VIDEO_ID,
-        playerVars: {
-          autoplay: 1,
-          mute: 1,
-          controls: 0,
-          loop: 1,
-          playlist: VIDEO_ID,
-          playsinline: 1,
-          rel: 0,
-          modestbranding: 1,
-          iv_load_policy: 3,
-          disablekb: 1,
-          fs: 0,
-        },
-        events: {
-          onReady: (e) => {
-            e.target.mute();
-            e.target.playVideo();
-            setPlayerReady(true);
-          },
-        },
-      });
-    });
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+
+    const markReady = () => setVideoReady(true);
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    };
+
+    // If the video already buffered (cache / fast load), the `loadeddata`
+    // event may have fired before this handler attached — so check directly.
+    if (v.readyState >= 2) markReady();
+
+    v.addEventListener("loadeddata", markReady);
+    v.addEventListener("canplay", markReady);
+    v.addEventListener("playing", markReady);
+
+    tryPlay();
+
+    // Fallback: some browsers (battery saver, strict autoplay policies) defer
+    // even muted autoplay until the first user gesture. Kick it off then.
+    const onGesture = () => tryPlay();
+    window.addEventListener("pointerdown", onGesture, { once: true });
+    window.addEventListener("scroll", onGesture, { once: true, passive: true });
+
     return () => {
-      cancelled = true;
-      if (playerRef.current?.destroy) {
-        playerRef.current.destroy();
-        playerRef.current = null;
-      }
+      v.removeEventListener("loadeddata", markReady);
+      v.removeEventListener("canplay", markReady);
+      v.removeEventListener("playing", markReady);
+      window.removeEventListener("pointerdown", onGesture);
+      window.removeEventListener("scroll", onGesture);
     };
   }, []);
 
+  // Pause the hero background film while reels are playing.
   useEffect(() => {
-    if (!film) return;
-    const onKey = (e) => e.key === "Escape" && setFilm(false);
-    document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
-  }, [film]);
+    const v = videoRef.current;
+    if (!v) return;
+    if (reelsOpen) v.pause();
+    else if (videoReady) v.play().catch(() => {});
+  }, [reelsOpen, videoReady]);
 
   return (
     <section
@@ -130,9 +106,20 @@ export default function Hero() {
           sizes="100vw"
           className="object-cover"
         />
-        <div className="video-cover absolute inset-0" aria-hidden="true">
-          <div id="ransam-bg-video" />
-        </div>
+        <video
+          ref={videoRef}
+          src={FILM_SRC}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          onLoadedData={() => setVideoReady(true)}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
+            videoReady ? "opacity-100" : "opacity-0"
+          }`}
+        />
       </m.div>
 
       {/* Cinematic overlays — bottom-left weighting for editorial legibility */}
@@ -156,7 +143,7 @@ export default function Hero() {
       {/* Content — anchored bottom-left */}
       <m.div
         style={parallax ? { y: contentY, opacity: contentOpacity } : undefined}
-        className="absolute inset-0 z-10 mx-auto flex max-w-[1500px] flex-col justify-end px-9 pb-24 sm:px-12 lg:px-16 lg:pb-28"
+        className="absolute inset-0 z-10 mx-auto flex max-w-[1500px] flex-col justify-end px-9 pb-[6.25rem] sm:px-12 sm:pb-28 lg:px-16"
       >
         <m.div
           initial={{ opacity: 0, x: -16 }}
@@ -215,13 +202,13 @@ export default function Hero() {
           </a>
           <button
             type="button"
-            onClick={() => setFilm(true)}
-            className="group inline-flex w-full items-center justify-center gap-3 border border-cream/45 px-8 py-4 font-body text-[0.72rem] uppercase tracking-[0.22em] text-cream transition-colors hover:border-cream sm:w-auto"
+            onClick={() => openReels(0)}
+            className="group hidden w-full items-center justify-center gap-3 border border-cream/45 px-8 py-4 font-body text-[0.72rem] uppercase tracking-[0.22em] text-cream transition-colors hover:border-cream sm:inline-flex sm:w-auto"
           >
             <span className="flex h-7 w-7 items-center justify-center rounded-full border border-cream/60 transition-colors group-hover:border-cream">
               <Play className="h-3 w-3 translate-x-[1px]" />
             </span>
-            Watch Film
+            Watch our Beauty
           </button>
         </m.div>
       </m.div>
@@ -232,11 +219,11 @@ export default function Hero() {
         onClick={toggleMute}
         aria-label={muted ? "Unmute background film" : "Mute background film"}
         aria-pressed={!muted}
-        disabled={!playerReady}
+        disabled={!videoReady}
         initial={{ opacity: 0 }}
-        animate={{ opacity: playerReady ? 1 : 0 }}
+        animate={{ opacity: videoReady ? 1 : 0 }}
         transition={{ duration: 1, delay: 1.5 }}
-        className="absolute bottom-10 right-9 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-cream/40 bg-charcoal/20 text-cream/80 backdrop-blur-sm transition-colors hover:border-cream hover:text-cream disabled:cursor-not-allowed lg:right-16"
+        className="absolute bottom-[6.25rem] right-9 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-cream/40 bg-charcoal/20 text-cream/80 backdrop-blur-sm transition-colors hover:border-cream hover:text-cream disabled:cursor-not-allowed sm:bottom-10 lg:right-16"
       >
         {muted ? (
           <VolumeOff className="h-5 w-5" />
@@ -245,48 +232,6 @@ export default function Hero() {
         )}
       </m.button>
 
-      {/* Watch Film lightbox */}
-      <AnimatePresence>
-        {film && (
-          <m.div
-            key="film"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
-            onClick={() => setFilm(false)}
-            className="fixed inset-0 z-[120] flex items-center justify-center bg-charcoal/95 p-4 sm:p-8"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Hotel Ransam film"
-          >
-            <button
-              type="button"
-              onClick={() => setFilm(false)}
-              aria-label="Close film"
-              className="absolute right-4 top-4 flex h-12 w-12 items-center justify-center text-cream/80 transition-colors hover:text-cream sm:right-8 sm:top-8"
-            >
-              <Close className="h-7 w-7" />
-            </button>
-            <m.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.4, ease: EASE }}
-              onClick={(e) => e.stopPropagation()}
-              className="aspect-video w-full max-w-5xl overflow-hidden bg-black shadow-2xl"
-            >
-              <iframe
-                src={FILM_SRC}
-                title="Hotel Ransam — The Film"
-                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-                allowFullScreen
-                className="h-full w-full"
-              />
-            </m.div>
-          </m.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

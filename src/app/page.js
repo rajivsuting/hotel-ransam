@@ -1,4 +1,5 @@
 import Navigation from "@/components/Navigation";
+import MobileTabBar from "@/components/MobileTabBar";
 import Hero from "@/components/Hero";
 import Philosophy from "@/components/Philosophy";
 import Rooms from "@/components/Rooms";
@@ -15,7 +16,7 @@ export default function Home() {
   return (
     <>
       <Navigation />
-      <main id="main">
+      <main id="main" className="pb-[4.75rem] sm:pb-0">
         <Hero />
         <Philosophy />
         <Rooms />
@@ -28,6 +29,7 @@ export default function Home() {
         <Booking />
       </main>
       <Footer />
+      <MobileTabBar />
     </>
   );
 }

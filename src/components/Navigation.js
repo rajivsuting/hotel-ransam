@@ -5,11 +5,11 @@ import { m, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motio
 import { Menu, Close } from "@/lib/icons";
 
 const LINKS = [
-  { label: "Rooms", href: "#rooms" },
-  { label: "Dining", href: "#dining" },
-  { label: "Spa", href: "#spa" },
-  { label: "Facilities", href: "#facilities" },
-  { label: "Contact", href: "#contact" },
+  { label: "Rooms", href: "/#rooms" },
+  { label: "Dining", href: "/#dining" },
+  { label: "Spa", href: "/#spa" },
+  { label: "Facilities", href: "/#facilities" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 const drawerLink = {
@@ -51,13 +51,13 @@ export default function Navigation() {
       >
         {/* Logo — centered on mobile, left on lg */}
         <a
-          href="#home"
+          href="/"
           onClick={closeAnd}
           className={`font-accent absolute left-1/2 -translate-x-1/2 text-xl tracking-[0.32em] text-gold transition-colors lg:static lg:translate-x-0 lg:text-2xl ${
             open ? "text-cream lg:text-gold" : ""
           }`}
         >
-          RANSAM
+          Hotel Ransam
         </a>
 
         {/* Desktop links */}
@@ -80,7 +80,7 @@ export default function Navigation() {
 
         {/* Desktop CTA */}
         <a
-          href="#booking"
+          href="/#booking"
           className={`btn-fill hidden border px-7 py-3 font-body text-[0.72rem] uppercase tracking-[0.22em] lg:inline-block ${
             scrolled
               ? "border-gold text-charcoal hover:text-cream"
@@ -135,7 +135,7 @@ export default function Navigation() {
             </m.ul>
 
             <m.a
-              href="#booking"
+              href="/#booking"
               onClick={closeAnd}
               variants={drawerLink}
               initial="hidden"

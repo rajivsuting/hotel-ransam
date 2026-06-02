@@ -82,12 +82,8 @@ export default function Booking() {
         >
           <p>
             Or call us at{" "}
-            <a href="tel:+919089525221" className="link-underline text-charcoal">
-              90895 25221
-            </a>
-            ,{" "}
-            <a href="tel:+918132811845" className="link-underline text-charcoal">
-              81328 11845
+            <a href="tel:+918974765737" className="link-underline text-charcoal">
+              89747 65737
             </a>
             ,{" "}
             <a href="tel:+918119914534" className="link-underline text-charcoal">

@@ -205,6 +205,49 @@ export function VolumeOff({ className = "" }) {
   );
 }
 
+/* --- Reels / tab-bar icons --- */
+
+export function Heart({ className = "", filled = false }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill={filled ? "currentColor" : "none"}
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 20.3l-1.1-1C6 14.9 3 12.1 3 8.6 3 6 5 4 7.5 4c1.5 0 2.9.7 3.8 1.9L12 7l.7-1.1C13.6 4.7 15 4 16.5 4 19 4 21 6 21 8.6c0 3.5-3 6.3-7.9 10.7l-1.1 1z" />
+    </svg>
+  );
+}
+
+export function Share({ className = "" }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+    </svg>
+  );
+}
+
+export function Bed({ className = "" }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M2 17v-4a2 2 0 012-2h16a2 2 0 012 2v4M2 17h20M4 11V8a2 2 0 012-2h12a2 2 0 012 2v3M2 17v2M22 17v2" />
+    </svg>
+  );
+}
+
+export function Phone({ className = "" }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M5 4h3.5l1.5 4-2 1.3a12 12 0 005.7 5.7L15 13l4 1.5V18a2 2 0 01-2.2 2A15 15 0 014 6.2 2 2 0 015 4z" />
+    </svg>
+  );
+}
+
 /* --- Social icons --- */
 
 export function Instagram({ className = "" }) {

@@ -1,45 +1,29 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { m } from "framer-motion";
 import { viewportOnce } from "@/lib/motion";
+import { DINING_VENUES, DINING_SERVICES } from "@/lib/content";
 
 const EASE = [0.22, 1, 0.36, 1];
 
-const VENUES = [
-  {
-    name: "The Rooftop",
-    tag: "All-Day Dining",
-    img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80",
-    alt: "Candlelit table at the rooftop restaurant",
+const VENUE_LAYOUT = {
+  "the-rooftop": {
     area: "lg:col-start-1 lg:col-span-3 lg:row-start-1 lg:row-span-2",
     kind: "main",
   },
-  {
-    name: "Seafood & Grill",
-    tag: "Wood Fire",
-    img: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=600&q=80",
-    alt: "Wood-fired dish plated at the grill",
+  "seafood-grill": {
     area: "lg:col-start-4 lg:col-span-3 lg:row-start-1 lg:row-span-1",
     kind: "side",
     delay: 0.1,
   },
-  {
-    name: "The Bar & Lounge",
-    tag: "Cocktails",
-    img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=80",
-    alt: "Cocktails on the bar at golden hour",
+  "the-bar-lounge": {
     area: "lg:col-start-4 lg:col-span-3 lg:row-start-2 lg:row-span-2",
     kind: "side",
     delay: 0.3,
   },
-];
-
-const DETAILS = [
-  { label: "Open Daily", value: "Rooftop Dining" },
-  { label: "Evenings", value: "Bar & Lounge" },
-  { label: "On Request", value: "Private Events" },
-];
+};
 
 function Headline() {
   const line1 = ["A", "Table", "at", "the"];
@@ -135,31 +119,34 @@ export default function Dining() {
               that shaped it.
             </p>
             <p className="font-cormorant-sc relative mt-4 text-[0.7rem] uppercase tracking-[0.2em] text-ransam-clay">
-              — The Ransam Kitchen
+              — The Hotel Ransam Kitchen
             </p>
           </m.div>
 
-          {VENUES.map((v) => (
+          {DINING_VENUES.map((v) => {
+            const layout = VENUE_LAYOUT[v.slug];
+            return (
             <article
-              key={v.name}
-              className={`group relative h-[62vw] w-full overflow-hidden bg-ransam-stone sm:h-[420px] lg:h-auto ${v.area}`}
+              key={v.slug}
+              className={`group relative h-[62vw] w-full overflow-hidden bg-ransam-stone sm:h-[420px] lg:h-auto ${layout.area}`}
             >
+              <Link href={`/dining/${v.slug}`} className="block h-full">
               <m.div
                 initial={
-                  v.kind === "main"
+                  layout.kind === "main"
                     ? { scale: 1.06 }
                     : { opacity: 0, scale: 1.08 }
                 }
                 whileInView={
-                  v.kind === "main"
+                  layout.kind === "main"
                     ? { scale: 1 }
                     : { opacity: 1, scale: 1 }
                 }
                 viewport={viewportOnce}
                 transition={{
-                  duration: v.kind === "main" ? 1.2 : 0.9,
+                  duration: layout.kind === "main" ? 1.2 : 0.9,
                   ease: EASE,
-                  delay: v.delay || 0,
+                  delay: layout.delay || 0,
                 }}
                 className="relative h-full w-full"
               >
@@ -181,37 +168,53 @@ export default function Dining() {
                   <h3 className="font-playfair mt-3 text-2xl italic text-ransam-white lg:text-3xl">
                     {v.name}
                   </h3>
+                  <p className="mt-2 font-outfit text-[0.72rem] uppercase tracking-[0.18em] text-ransam-white/70">
+                    View details →
+                  </p>
                 </div>
               </m.div>
+              </Link>
             </article>
-          ))}
+            );
+          })}
         </div>
 
-        {/* PART 3 — DETAILS STRIP */}
+        {/* PART 3 — SERVICES */}
         <m.div
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          variants={{ show: { transition: { staggerChildren: 0.1 } } }}
-          className="mt-14 flex flex-col divide-y divide-ransam-clay/20 border-y border-ransam-clay/20 lg:flex-row lg:divide-x lg:divide-y-0"
+          variants={{ show: { transition: { staggerChildren: 0.06 } } }}
+          className="mt-14 border-y border-ransam-clay/20 py-10 lg:mt-16 lg:py-12"
         >
-          {DETAILS.map((d) => (
-            <m.div
-              key={d.value}
-              variants={{
-                hidden: { opacity: 0, scale: 0.95 },
-                show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: EASE } },
-              }}
-              className="flex-1 py-6 text-center lg:py-7"
-            >
-              <p className="font-cormorant-sc text-[0.65rem] uppercase tracking-[0.2em] text-ransam-clay">
-                {d.label}
-              </p>
-              <p className="font-playfair mt-1 text-[1.1rem] text-ransam-ink">
-                {d.value}
-              </p>
-            </m.div>
-          ))}
+          <m.p
+            variants={{
+              hidden: { opacity: 0, y: 10 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+            }}
+            className="font-cormorant-sc text-center text-[0.7rem] uppercase tracking-[0.22em] text-ransam-clay"
+          >
+            Our Services
+          </m.p>
+          <ul className="mt-8 grid grid-cols-1 gap-x-10 gap-y-0 sm:grid-cols-2 lg:grid-cols-3">
+            {DINING_SERVICES.map((service, i) => (
+              <m.li
+                key={service}
+                variants={{
+                  hidden: { opacity: 0, y: 8 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE } },
+                }}
+                className="leader-dashed flex items-center gap-4 py-3.5"
+              >
+                <span className="font-cormorant-sc shrink-0 text-[0.65rem] tabular-nums tracking-[0.15em] text-ransam-gold">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="font-outfit text-[0.92rem] font-light text-ransam-ink">
+                  {service}
+                </span>
+              </m.li>
+            ))}
+          </ul>
         </m.div>
 
         <m.div

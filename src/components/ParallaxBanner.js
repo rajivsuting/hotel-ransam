@@ -43,7 +43,7 @@ export default function ParallaxBanner() {
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           className="display-banner font-display max-w-3xl text-center font-light italic text-cream"
         >
-          “Every moment at Ransam is a memory in the making.”
+          “Every moment at Hotel Ransam is a memory in the making.”
         </m.blockquote>
       </div>
     </section>

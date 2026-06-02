@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { m, useScroll, useTransform } from "framer-motion";
 import { viewportOnce, useParallaxEnabled } from "@/lib/motion";
 import Counter from "./Counter";
 
 const EASE = [0.22, 1, 0.36, 1];
+const PHILOSOPHY_VIDEO = "/4.mp4";
+const PHILOSOPHY_PRINT = "/what-we-believe-img.jpg";
 
 const lineParent = { show: { transition: { staggerChildren: 0.15 } } };
 const lineChild = {
@@ -23,6 +25,7 @@ const STATS = [
 
 export default function Philosophy() {
   const clusterRef = useRef(null);
+  const videoRef = useRef(null);
   const parallax = useParallaxEnabled();
   const { scrollYProgress } = useScroll({
     target: clusterRef,
@@ -30,6 +33,24 @@ export default function Philosophy() {
   });
   const mainY = useTransform(scrollYProgress, [0, 1], [28, -28]);
   const accentY = useTransform(scrollYProgress, [0, 1], [-20, 20]);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    };
+    tryPlay();
+    const onGesture = () => tryPlay();
+    window.addEventListener("pointerdown", onGesture, { once: true });
+    window.addEventListener("scroll", onGesture, { once: true, passive: true });
+    return () => {
+      window.removeEventListener("pointerdown", onGesture);
+      window.removeEventListener("scroll", onGesture);
+    };
+  }, []);
 
   return (
     <section
@@ -183,12 +204,16 @@ export default function Philosophy() {
                 transition={{ duration: 1.1, ease: EASE }}
                 className="absolute inset-0 -top-8 h-[calc(100%+4rem)]"
               >
-                <Image
-                  src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900&q=80"
-                  alt="A quiet corner of Hotel Ransam"
-                  fill
-                  sizes="(max-width: 640px) 300px, 430px"
-                  className="object-cover"
+                <video
+                  ref={videoRef}
+                  src={PHILOSOPHY_VIDEO}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  aria-label="Hotel Ransam — suites of stone, timber and light"
+                  className="h-full w-full object-cover"
                 />
               </m.div>
               <div
@@ -223,8 +248,8 @@ export default function Philosophy() {
             >
               <div className="relative h-[135px] w-full sm:h-[180px]">
                 <Image
-                  src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80"
-                  alt="The landscape surrounding the resort"
+                  src={PHILOSOPHY_PRINT}
+                  alt="Hotel Ransam — the landscape and setting around the resort"
                   fill
                   sizes="(max-width: 640px) 220px, 310px"
                   className="object-cover"

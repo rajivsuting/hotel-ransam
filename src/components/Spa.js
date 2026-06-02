@@ -2,19 +2,13 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { m, useScroll, useTransform } from "framer-motion";
 import { viewportOnce, useParallaxEnabled } from "@/lib/motion";
 import Counter from "./Counter";
+import { SPA_TREATMENTS } from "@/lib/content";
 
 const EASE = [0.22, 1, 0.36, 1];
-
-const TREATMENTS = [
-  "Aroma Massage",
-  "Balinese Massage",
-  "Deep Tissue",
-  "Steam Room",
-  "Mini Pool",
-];
 
 const COLLAGE = [
   {
@@ -172,20 +166,24 @@ export default function Spa() {
               variants={{ show: { transition: { staggerChildren: 0.1 } } }}
               className="mt-10 flex flex-col"
             >
-              {TREATMENTS.map((t) => (
+              {SPA_TREATMENTS.map((t) => (
                 <m.li
-                  key={t}
+                  key={t.slug}
                   variants={{
                     hidden: { opacity: 0, x: -20 },
                     show: { opacity: 1, x: 0, transition: { duration: 0.5, ease: EASE } },
                   }}
-                  className="group flex items-center gap-4 py-3.5 transition-transform duration-300 hover:translate-x-1"
                 >
-                  <span className="font-cormorant-sc whitespace-nowrap text-[0.9rem] uppercase tracking-[0.12em] text-ransam-stone/80 transition-colors group-hover:text-ransam-stone">
-                    {t}
-                  </span>
-                  <span className="leader-dashed h-px flex-1" />
-                  <span className="h-2 w-2 shrink-0 rounded-full border border-ransam-gold/50 transition-colors duration-300 group-hover:bg-ransam-gold" />
+                  <Link
+                    href={`/spa/${t.slug}`}
+                    className="group flex items-center gap-4 py-3.5 transition-transform duration-300 hover:translate-x-1"
+                  >
+                    <span className="font-cormorant-sc whitespace-nowrap text-[0.9rem] uppercase tracking-[0.12em] text-ransam-stone/80 transition-colors group-hover:text-ransam-stone">
+                      {t.name}
+                    </span>
+                    <span className="leader-dashed h-px flex-1" />
+                    <span className="h-2 w-2 shrink-0 rounded-full border border-ransam-gold/50 transition-colors duration-300 group-hover:bg-ransam-gold" />
+                  </Link>
                 </m.li>
               ))}
             </m.ul>
